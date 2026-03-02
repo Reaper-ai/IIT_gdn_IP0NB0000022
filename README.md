@@ -66,3 +66,21 @@ The output PDF will be saved in the `Visualizations/` directory (e.g., `Visualiz
 The `scripts/data_loader.py` module provides the `load_data` function, which can be imported and used in other scripts or notebooks to retrieve raw signals and events.
 
 ### 4. Model training
+#### ⚠️ IMPORTANT PREREQUISITE: Due to GitHub's strict 100 MB file size limit, the processed datasets (breathing_dataset.csv and sleep_stage_dataset.csv) are not included in this repository. You must run the create_dataset.py script (as detailed in Section 1) to generate these files locally before attempting to train the model.
+
+Once datasets are generated, proceed with training the 1D Convolutional Neural Network (CNN). The complete training pipeline is contained within the provided Jupyter Notebook.
+
+What the notebook does:
+
+- **Data Loading**: Uses a custom PyTorch Dataset to efficiently load the flattened CSV rows and reshape them into (Channels, Sequence_Length) tensors.
+- **Model Initialization**: Constructs a 1D CNN optimized for dual-channel physiological time-series data using Conv1d, BatchNorm1d, and AdaptiveAvgPool1d layers.
+- **LOOCV Strategy**: Executes a strict Leave-One-Participant-Out Cross-Validation loop to ensure the model's performance generalizes to unseen patients.
+- **Imbalance Handling**: Dynamically calculates and applies class weights to the Cross-Entropy Loss function to prevent the model from overfitting to the majority "Normal" breathing class.
+- **Metric Visualization**: Outputs per-fold confusion matrices via Seaborn and a comprehensive final bar chart comparing Accuracy, Precision, Recall, and F1-Score across all participants.
+
+**How to run**:
+Simply open the notebook in your preferred environment (Jupyter, VS Code, Google Colab) and execute the cells sequentially:
+
+```bash
+jupyter notebook model_training.ipynb
+```
